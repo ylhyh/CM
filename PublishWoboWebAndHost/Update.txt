@@ -1,0 +1,60 @@
+@echo off
+
+call %~dp0..\InitParams.bat
+if %errorlevel% NEQ 0 goto Error
+
+echo Starting to stop all services...
+call %~dp0..\StopAllServers.bat
+if %errorlevel% NEQ 0 goto Error
+
+echo Starting backup database: %DBName%
+call %~dp0..\BackupDB.bat
+
+echo Starting to update database...
+for /f %%a in ('dir %~dp0DBScripts /s /b /a-d') do (
+    echo Starting update SQL file: %%a
+    sqlcmd -b -S %DBServer% -U %DBUser% -P "%DBPass%" -d %DBName% -i "%%a"
+    if %errorlevel% NEQ 0 goto Error
+)
+
+echo Starting to update Api Host...
+del /F /Q %ApiDeployPath%\
+rd /S /Q %ApiDeployPath%\Dict
+xcopy %~dp0WebAndHost\Host\*.* %ApiDeployPath%\ /E /H /R /Y
+if %errorlevel% NEQ 0 goto Error
+
+echo Starting to update Web...
+for /f %%a in ('dir %WebDeployPath%\ /b /ad') do (
+    if /i "%%a" NEQ "bin" rd /S /Q "%WebDeployPath%\%%a"
+)
+for /f %%a in ('dir %WebDeployPath%\bin /b /ad') do (
+    if /i "%%a" NEQ "log" rd /S /Q "%WebDeployPath%\bin\%%a"
+)
+del /F /Q %WebDeployPath%\
+del /F /Q %WebDeployPath%\bin
+xcopy %~dp0WebAndHost\Web\*.* %WebDeployPath%\ /E /H /R /Y
+if %errorlevel% NEQ 0 goto Error
+
+echo Starting to update Admin...
+for /f %%a in ('dir %AdminDeployPath%\ /b /ad') do (
+    if /i "%%a" NEQ "bin" rd /S /Q "%AdminDeployPath%\%%a"
+)
+for /f %%a in ('dir %AdminDeployPath%\bin /b /ad') do (
+    if /i "%%a" NEQ "log" rd /S /Q "%AdminDeployPath%\bin\%%a"
+)
+del /F /Q %AdminDeployPath%\
+del /F /Q %AdminDeployPath%\bin
+xcopy %~dp0WebAndHost\Admin\*.* %AdminDeployPath%\ /E /H /R /Y
+if %errorlevel% NEQ 0 goto Error
+
+echo Starting to start all services...
+call %~dp0..\StartAllServers.bat
+if %errorlevel% NEQ 0 goto Error
+
+echo Update successed.
+pause
+exit
+
+:Error
+echo An error has occurred %errorLevel%
+pause
