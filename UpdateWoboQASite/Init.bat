@@ -51,6 +51,18 @@ md C:\5BVV-Web\admin-QA
 xcopy %~dp0CodeSource\PrecompiledWeb\Admin\*.* C:\5BVV-Web\admin-QA\ /E /H /R /Y /EXCLUDE:%~dp0..\Excludes.txt
 if %errorlevel% NEQ 0 goto Error
 
+echo Starting to update Web (en-US)...
+rd /S /Q C:\5BVV-Web\web-QA-en\
+md C:\5BVV-Web\web-QA-en
+xcopy %~dp0CodeSource\PrecompiledWeb\Web\*.* C:\5BVV-Web\web-QA-en\ /E /H /R /Y /EXCLUDE:%~dp0..\Excludes.txt
+if %errorlevel% NEQ 0 goto Error
+
+echo Starting to update Admin (en-US)...
+rd /S /Q C:\5BVV-Web\admin-QA-en\
+md C:\5BVV-Web\admin-QA-en
+xcopy %~dp0CodeSource\PrecompiledWeb\Admin\*.* C:\5BVV-Web\admin-QA-en\ /E /H /R /Y /EXCLUDE:%~dp0..\Excludes.txt
+if %errorlevel% NEQ 0 goto Error
+
 echo Starting to replace configuration variables...
 call %~dp0..\ReplaceContent C:\5BVV-Srv\ApiHost-QA\HKSJ.WBVV.Api.Host.exe.config @@ApiHostBindAddress@@ http://*:9900
 call %~dp0..\ReplaceContent C:\5BVV-Srv\ApiHost-QA\HKSJ.WBVV.Api.Host.exe.config @@ApiHostServicePort@@ 9999
@@ -78,6 +90,7 @@ call %~dp0..\ReplaceContent C:\5BVV-Srv\ApiHost-QA\HKSJ.WBVV.Api.Host.exe.config
 call %~dp0..\ReplaceContent C:\5BVV-Srv\ApiHost-QA\HKSJ.WBVV.Api.Host.exe.config @@MemcachedBindAddress@@ 127.0.0.1
 call %~dp0..\ReplaceContent C:\5BVV-Srv\ApiHost-QA\HKSJ.WBVV.Api.Host.exe.config @@MemcachedBindPort@@ 22322
 call %~dp0..\ReplaceContent C:\5BVV-Web\web-QA\web.config @@ApiHostAddress@@ http://192.168.45.19:9900/api/
+call %~dp0..\ReplaceContent C:\5BVV-Web\web-QA\web.config @@ActiveLanguage@@ zh-CN
 call %~dp0..\ReplaceContent C:\5BVV-Web\web-QA\web.config @@ValidationKey@@ AutoGenerate,IsolateApps
 call %~dp0..\ReplaceContent C:\5BVV-Web\web-QA\web.config @@DecryptionKey@@ AutoGenerate,IsolateApps
 
@@ -86,6 +99,20 @@ call %~dp0..\ReplaceContent C:\5BVV-Web\web-QA\web.config @@SinaAppKey@@ 4071383
 call %~dp0..\ReplaceContent C:\5BVV-Web\web-QA\web.config @@QQCallBackPath@@ http://sso.5bvv.com/SSOCallBack/QQCallBack
 
 call %~dp0..\ReplaceContent C:\5BVV-Web\admin-QA\web.config @@ApiHostAddress@@ http://192.168.45.19:9900/api/
+call %~dp0..\ReplaceContent C:\5BVV-Web\admin-QA\web.config @@ActiveLanguage@@ zh-CN
+
+call %~dp0..\ReplaceContent C:\5BVV-Web\web-QA-en\web.config @@ApiHostAddress@@ http://192.168.45.19:9900/api/
+call %~dp0..\ReplaceContent C:\5BVV-Web\web-QA-en\web.config @@ActiveLanguage@@ en-US
+call %~dp0..\ReplaceContent C:\5BVV-Web\web-QA-en\web.config @@ValidationKey@@ AutoGenerate,IsolateApps
+call %~dp0..\ReplaceContent C:\5BVV-Web\web-QA-en\web.config @@DecryptionKey@@ AutoGenerate,IsolateApps
+
+call %~dp0..\ReplaceContent C:\5BVV-Web\web-QA-en\web.config @@QQAppId@@ 101274600
+call %~dp0..\ReplaceContent C:\5BVV-Web\web-QA-en\web.config @@SinaAppKey@@ 40713838
+call %~dp0..\ReplaceContent C:\5BVV-Web\web-QA-en\web.config @@QQCallBackPath@@ http://sso.5bvv.com/SSOCallBack/QQCallBack
+
+call %~dp0..\ReplaceContent C:\5BVV-Web\admin-QA-en\web.config @@ApiHostAddress@@ http://192.168.45.19:9900/api/
+call %~dp0..\ReplaceContent C:\5BVV-Web\admin-QA-en\web.config @@ActiveLanguage@@ en-US
+
 if %errorlevel% NEQ 0 goto Error
 
 echo Generating version information...

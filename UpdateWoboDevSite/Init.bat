@@ -77,6 +77,11 @@ call %~dp0..\ReplaceContent C:\5BVV-Srv\ApiHost\HKSJ.WBVV.Api.Host.exe.config @@
 call %~dp0..\ReplaceContent C:\5BVV-Web\web\web.config @@ApiHostAddress@@ http://192.168.45.19:8800/api/
 call %~dp0..\ReplaceContent C:\5BVV-Web\web\web.config @@ValidationKey@@ AutoGenerate,IsolateApps
 call %~dp0..\ReplaceContent C:\5BVV-Web\web\web.config @@DecryptionKey@@ AutoGenerate,IsolateApps
+
+call %~dp0..\ReplaceContent C:\5BVV-Web\web\web.config @@QQAppId@@ 101274600
+call %~dp0..\ReplaceContent C:\5BVV-Web\web\web.config @@SinaAppKey@@ 40713838
+call %~dp0..\ReplaceContent C:\5BVV-Web\web\web.config @@QQCallBackPath@@ http://sso.5bvv.com/SSOCallBack/QQCallBack
+
 call %~dp0..\ReplaceContent C:\5BVV-Web\admin\web.config @@ApiHostAddress@@ http://192.168.45.19:8800/api/
 if %errorlevel% NEQ 0 goto Error
 
