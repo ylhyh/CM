@@ -91,7 +91,7 @@ call %~dp0..\ReplaceContent C:\5BVV-Web\admin\version.html @@CodeRevision@@ %Cod
 call %~dp0..\ReplaceContent C:\5BVV-Web\admin\version.html @@BuildDate@@ "%date% %time%"
 if %errorlevel% NEQ 0 goto Error
 
-copy /Y %~dp0..\Qiniu.4.0.dll C:\5BVV-Srv\ApiHost\
+:: copy /Y %~dp0..\Qiniu.4.0.dll C:\5BVV-Srv\ApiHost\
 
 echo Starting to start all services...
 call %~dp0..\StartAllServers.bat

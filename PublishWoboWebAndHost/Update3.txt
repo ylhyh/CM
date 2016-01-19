@@ -1,6 +1,4 @@
-@echo off
 
-call %~dp0..\InitParams.bat
 if %errorlevel% NEQ 0 goto Error
 
 echo Starting to stop all services...
@@ -11,7 +9,7 @@ echo Starting backup database: %DBName%
 call %~dp0..\BackupDB.bat
 
 echo Starting to update database...
-for /f %%a in ('dir %~dp0DBScripts /s /b /a-d') do (
+for /f %%a in ('dir %~dp0DBScripts\%ActiveLanguage% /s /b /a-d') do (
     echo Starting update SQL file: %%a
     sqlcmd -b -S %DBServer% -U %DBUser% -P "%DBPass%" -d %DBName% -i "%%a"
     if %errorlevel% NEQ 0 goto Error
@@ -21,6 +19,8 @@ echo Starting to update Api Host...
 del /F /Q %ApiDeployPath%\
 rd /S /Q %ApiDeployPath%\Dict
 xcopy %~dp0WebAndHost\Host\*.* %ApiDeployPath%\ /E /H /R /Y
+move /Y %ApiDeployPath%\HKSJ.WBVV.Api.Host.exe.%ActiveLanguage%.config %ApiDeployPath%\HKSJ.WBVV.Api.Host.exe.config
+del %ApiDeployPath%\HKSJ.WBVV.Api.Host.exe.*.config
 if %errorlevel% NEQ 0 goto Error
 
 echo Starting to update Web...
@@ -33,6 +33,8 @@ for /f %%a in ('dir %WebDeployPath%\bin /b /ad') do (
 del /F /Q %WebDeployPath%\
 del /F /Q %WebDeployPath%\bin
 xcopy %~dp0WebAndHost\Web\*.* %WebDeployPath%\ /E /H /R /Y
+move /Y %WebDeployPath%\web.%ActiveLanguage%.config %WebDeployPath%\web.config
+del %WebDeployPath%\web.*.config
 if %errorlevel% NEQ 0 goto Error
 
 echo Starting to update Admin...
@@ -45,6 +47,8 @@ for /f %%a in ('dir %AdminDeployPath%\bin /b /ad') do (
 del /F /Q %AdminDeployPath%\
 del /F /Q %AdminDeployPath%\bin
 xcopy %~dp0WebAndHost\Admin\*.* %AdminDeployPath%\ /E /H /R /Y
+move /Y %AdminDeployPath%\web.%ActiveLanguage%.config %AdminDeployPath%\web.config
+del %AdminDeployPath%\web.*.config
 if %errorlevel% NEQ 0 goto Error
 
 echo Starting to start all services...

@@ -2,7 +2,7 @@
 
 set Env=QA
 
-REM -----Cn Site Parameters-----
+:: -----Cn Site Parameters-----
 set Round=1
 set WebAppPool=5BVV-Web-QA
 set AdminAppPool=5BVV-Admin-QA
@@ -32,7 +32,7 @@ set ApiHostAddress=http://192.168.45.19:9900/api/
 
 goto Execute
 
-REM -----En Site Parameters-----
+:: -----En Site Parameters-----
 :EnSiteUpdate
 set Round=2
 set WebAppPool=5BVV-Web-QA-en
@@ -56,7 +56,7 @@ set ActiveLanguage=en-US
 set ApiHostAddress=http://192.168.45.19:9901/api/
 
 
-REM -----Action Start-----
+:: -----Action Start-----
 :Execute
 echo Starting to stop all services...
 call %~dp0..\StopAllServers.bat
@@ -97,14 +97,14 @@ echo Starting to replace configuration variables...
 call %~dp0..\ReplaceContent %ApiRoot%\HKSJ.WBVV.Api.Host.exe.config @@ApiHostBindAddress@@ %ApiHostBindAddress%
 call %~dp0..\ReplaceContent %ApiRoot%\HKSJ.WBVV.Api.Host.exe.config @@ApiHostServicePort@@ %ApiHostServicePort%
 
-call %~dp0..\ReplaceContent %ApiRoot%\HKSJ.WBVV.Api.Host.exe.config @@QiniuPrivateAccessKey@@ 5XpBDEz38TW5Bpe8ntpNIYnvdrLLEp3_AR5c645V
-call %~dp0..\ReplaceContent %ApiRoot%\HKSJ.WBVV.Api.Host.exe.config @@QiniuPrivateSecretKey@@ TohP7pWKs6Acou3UKRLZTFBZv4k4xHEhcqSiLAXQ
-call %~dp0..\ReplaceContent %ApiRoot%\HKSJ.WBVV.Api.Host.exe.config @@QiniuPrivateBucketName@@ qa-private
+call %~dp0..\ReplaceContent %ApiRoot%\HKSJ.WBVV.Api.Host.exe.config @@QiniuPrivateAccessKey@@ YQaa4CHMqBBGKGc9s5ZA-EvWQTKIMm9VcKgGqj0j
+call %~dp0..\ReplaceContent %ApiRoot%\HKSJ.WBVV.Api.Host.exe.config @@QiniuPrivateSecretKey@@ hFnnXNXe924ee7F3OqysnzlZEiZnsDVIc7kCLXTU
+call %~dp0..\ReplaceContent %ApiRoot%\HKSJ.WBVV.Api.Host.exe.config @@QiniuPrivateBucketName@@ qa-video
 call %~dp0..\ReplaceContent %ApiRoot%\HKSJ.WBVV.Api.Host.exe.config @@QiniuPrivatePipelinePool@@ pipeline1;pipeline2;pipeline3;pipeline4
-call %~dp0..\ReplaceContent %ApiRoot%\HKSJ.WBVV.Api.Host.exe.config @@QiniuPrivateBucketDomain@@ 7xnjmm.media1.z0.glb.clouddn.com
+call %~dp0..\ReplaceContent %ApiRoot%\HKSJ.WBVV.Api.Host.exe.config @@QiniuPrivateBucketDomain@@ 7xp08k.media1.z0.glb.clouddn.com
 
-call %~dp0..\ReplaceContent %ApiRoot%\HKSJ.WBVV.Api.Host.exe.config @@QiniuPublicBucketName@@ qa-public
-call %~dp0..\ReplaceContent %ApiRoot%\HKSJ.WBVV.Api.Host.exe.config @@QiniuPublicBucketDomain@@ 7xnjmk.com1.z0.glb.clouddn.com
+call %~dp0..\ReplaceContent %ApiRoot%\HKSJ.WBVV.Api.Host.exe.config @@QiniuPublicBucketName@@ qa-picture
+call %~dp0..\ReplaceContent %ApiRoot%\HKSJ.WBVV.Api.Host.exe.config @@QiniuPublicBucketDomain@@ 7xp08j.com2.z0.glb.qiniucdn.com
 
 call %~dp0..\ReplaceContent %ApiRoot%\HKSJ.WBVV.Api.Host.exe.config @@QiniuCallBackURL@@ %QiniuCallBackURL%
 
@@ -140,7 +140,7 @@ call %~dp0..\ReplaceContent %AdminRoot%\version.html @@CodeRevision@@ %CodeRevis
 call %~dp0..\ReplaceContent %AdminRoot%\version.html @@BuildDate@@ "%date% %time%"
 if %errorlevel% NEQ 0 goto Error
 
-copy /Y %~dp0..\Qiniu.4.0.dll %ApiRoot%\
+:: copy /Y %~dp0..\Qiniu.4.0.dll %ApiRoot%\
 
 echo Starting to start all services...
 call %~dp0..\StartAllServers.bat

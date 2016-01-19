@@ -42,9 +42,9 @@ for /f "usebackq tokens=1,7 delims= " %%i in ("%CurDir%\sortedlist.tmp") do (
         if "%%j" NEQ "" (
            if "%Env%" EQU "Prod" (
                 for /f %%i in ('%~dp0AddFrontZero.bat !sqlFileCount!') do set SQLFileNum=%%i
-                copy "%CurDir%\%%j" "%PublishFolder%\DBScripts\SQL_!SQLFileNum!_%%i_%%j"
-                echo %PublishFolder%\DBScripts\SQL_!SQLFileNum!_%%i_%%j
-                echo sqlcmd -b -S %CMDBServer% -U %CMDBUser% -P %CMDBPass% -d %CMDBName% -Q "INSERT INTO DBUpdateHistory(RevisionNumber,DBServer,DBName,UpdatedFileName,Success,UpdateTime) VALUES(%%i,'%DBServer%','%DBName%','%%j',1,getdate())" > %CMStatusUpdateBatch%
+                copy "%CurDir%\%%j" "%PublishFolder%\DBScripts\%ActiveLanguage%\SQL_!SQLFileNum!_%%i_%%j"
+                echo %PublishFolder%\DBScripts\%ActiveLanguage%\SQL_!SQLFileNum!_%%i_%%j
+                echo sqlcmd -b -S %CMDBServer% -U %CMDBUser% -P %CMDBPass% -d %CMDBName% -Q "INSERT INTO DBUpdateHistory(RevisionNumber,DBServer,DBName,UpdatedFileName,Success,UpdateTime) VALUES(%%i,'%DBServer%','%DBName%','%%j',1,getdate())" >> %CMStatusUpdateBatch%
                 echo if %%errorlevel%% NEQ 0 exit /b %%errorlevel%% >> %CMStatusUpdateBatch%
                 set /a sqlFileCount+=1
             ) else (
