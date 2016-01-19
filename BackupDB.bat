@@ -14,6 +14,8 @@ echo GO >> %SQLFile%
 sqlcmd -b -S %DBServer% -U %DBUser% -P "%DBPass%" -d %DBName% -i "%SQLFile%"
 if %errorlevel% NEQ 0 goto Error
 
+del "%SQLFile%"
+
 exit /b 0
 
 :Error
