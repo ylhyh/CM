@@ -7,9 +7,17 @@ set PublishFolder=%~dp0ReleaseHistory\%TargetSubFolder%
 if exist %PublishFolder% (
     rd /S /Q %PublishFolder%
 ) else (
-    md %PublishFolder%\DBScripts\
+    md %PublishFolder%\DBScripts
     md %PublishFolder%\WebAndHost
 )
+
+cd %~dp0CodeSource\
+for /f "tokens=4 delims= " %%i in ('svn info ^| find "Last Changed Rev: "') do set CodeRevision=%%i
+if %errorlevel% NEQ 0 goto Error
+
+echo Creating package Readme file...
+echo Code Revision #:%CodeRevision% > %PublishFolder%\Readme.txt
+cd %~dp0
 
 :: -----Cn Site Parameters-----
 echo Packing CN site...
@@ -36,7 +44,7 @@ set ApiHostAddress=http://api.5bvv.cn/api/
 set WebValidationKey=2BA1DC068A862AF87AD4DEEB29C5CEA934D97F1B590703ED9C8BA14E2E86C6FACA06404F50FD2B09480532E4D64955B9521D1016AD94B8863B89E1CFD009D29A
 set WebDecryptionKey=26A11EC1577C2E0AFD22E807645A0C2F2D40DB23C6823E6A
 set QQAppId=101274019
-set SinaAppKey=1792654996
+set SinaAppKey=""
 set QQCallBackPath=http://www.5bvv.cn/SSOCallBack/QQCallBack
 
 goto Execute
@@ -63,7 +71,7 @@ set ApiHostAddress=http://api.5bvv.com/api/
 set WebValidationKey=4F538EE7064FF40EC2C6ED96F390CA380AC3FCAE99D14DD25E4FEAF25D2C76DEACF4636FC5ED61F520DA6F30504D276C94A147CB825386855C1F14580045B215
 set WebDecryptionKey=B446DC8667A477E30CBCBF047129E64EB4856854DF3593E7
 set QQAppId=101288950
-set SinaAppKey=
+set SinaAppKey=""
 set QQCallBackPath=http://www.5bvv.com/SSOCallBack/QQCallBack
 
 :: -----Action Start-----
@@ -77,12 +85,6 @@ call %~dp0..\updatedb.bat
 if %errorlevel% NEQ 0 goto Error
 
 if %Round% EQU 1 (
-	cd %~dp0CodeSource\
-	for /f "tokens=4 delims= " %%i in ('svn info ^| find "Last Changed Rev: "') do set CodeRevision=%%i
-	if %errorlevel% NEQ 0 goto Error
-	echo Code Revision #:%CodeRevision% >> %PublishFolder%\Readme.txt
-	cd %~dp0
-
 	echo Starting copy Api Host...
 	xcopy %~dp0CodeSource\PrecompiledWeb\Host\*.* %PublishFolder%\WebAndHost\Host\ /E /H /R /Y /EXCLUDE:%~dp0..\Excludes.txt
 	if %errorlevel% NEQ 0 goto Error

@@ -82,10 +82,10 @@ echo ---------------------------------------------------------------------------
 if "%Env%" EQU "Prod" (
     if %sqlFileCount% NEQ 0 (
         echo 共复制了[%sqlFileCount%]个SQL文件到发布目录: %PublishFolder% ，下次打包将不会包括这些SQL文件。
-        echo DB Scripts Revision #:%LastRev%(%DBName%) >> %PublishFolder%\Readme.txt
+        echo DB Scripts Revision #:%LastRev% [%ActiveLanguage%] >> %PublishFolder%\Readme.txt
     ) else (
         echo 没有数据库更新。
-        echo No DB scripts need to be executed(%DBName%). >> %PublishFolder%\Readme.txt
+        echo No DB scripts need to be executed. [%ActiveLanguage%] >> %PublishFolder%\Readme.txt
     )
 ) else (
     if "%successFiles%" EQU "" (
