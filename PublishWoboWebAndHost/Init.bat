@@ -36,7 +36,7 @@ set ApiHostAddress=http://api.5bvv.cn/api/
 set WebValidationKey=2BA1DC068A862AF87AD4DEEB29C5CEA934D97F1B590703ED9C8BA14E2E86C6FACA06404F50FD2B09480532E4D64955B9521D1016AD94B8863B89E1CFD009D29A
 set WebDecryptionKey=26A11EC1577C2E0AFD22E807645A0C2F2D40DB23C6823E6A
 set QQAppId=101274019
-set SinaAppKey=2117316641
+set SinaAppKey=1792654996
 set QQCallBackPath=http://www.5bvv.cn/SSOCallBack/QQCallBack
 
 goto Execute
@@ -62,8 +62,8 @@ set MemcachedBindPort=33434
 set ApiHostAddress=http://api.5bvv.com/api/
 set WebValidationKey=4F538EE7064FF40EC2C6ED96F390CA380AC3FCAE99D14DD25E4FEAF25D2C76DEACF4636FC5ED61F520DA6F30504D276C94A147CB825386855C1F14580045B215
 set WebDecryptionKey=B446DC8667A477E30CBCBF047129E64EB4856854DF3593E7
-set QQAppId=000000000
-set SinaAppKey=0000000000
+set QQAppId=101288950
+set SinaAppKey=
 set QQCallBackPath=http://www.5bvv.com/SSOCallBack/QQCallBack
 
 :: -----Action Start-----
@@ -152,14 +152,6 @@ echo call %%~dp0..\InitParams.%ActiveLanguage%.bat > %~dp0Update2.txt
 copy %~dp0Update1.txt /b + %~dp0Update2.txt /b + %~dp0Update3.txt /b %PublishFolder%\Update.%ActiveLanguage%.bat
 if %errorlevel% NEQ 0 goto Error
 
-if %Round% EQU 1 goto EnSiteUpdate
-
-echo Starting to zip the package...
-"C:\Program Files\7-Zip\7z.exe" a -tzip %~dp0ReleaseHistory\%TargetSubFolder%.zip "%PublishFolder%\*"
-if %errorlevel% NEQ 0 goto Error
- rd /S /Q %PublishFolder%
-if %errorlevel% NEQ 0 goto Error
-
 :: if there is no error, will record DB Update History to CM DB.
 if exist %CMStatusUpdateBatch% (
     echo Starting record DB status to database
@@ -167,6 +159,14 @@ if exist %CMStatusUpdateBatch% (
     if %errorlevel% NEQ 0 goto Error
     del %CMStatusUpdateBatch%
 )
+
+if %Round% EQU 1 goto EnSiteUpdate
+
+echo Starting to zip the package...
+"C:\Program Files\7-Zip\7z.exe" a -tzip %~dp0ReleaseHistory\%TargetSubFolder%.zip "%PublishFolder%\*"
+if %errorlevel% NEQ 0 goto Error
+ rd /S /Q %PublishFolder%
+if %errorlevel% NEQ 0 goto Error
 
 exit /b 0
 :Error
